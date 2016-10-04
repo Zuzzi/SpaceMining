@@ -8,9 +8,32 @@
     <p>Leading the Mankind Future</p>
   </div>
  </center>
+ 
+ 
+ 
+ 
+  <div class="w3-content w3-section" style="max-width:800px">
+  <img class="mySlides" src="{{ url_for('static', filename = 'slideshow1.jpg') }}" style="width:100%">
+  <img class="mySlides" src="{{ url_for('static', filename = 'slideshow2.jpg') }}" style="width:100%">
+  <img class="mySlides" src="{{ url_for('static', filename = 'slideshow3.jpg') }}" style="width:100%">
+</div>
+
+<script>
+var myIndex = 0;
+carousel();
+</script>
+  
+ 
+ 
+ 
+ 
+ 
 
 <div class="w3-content w3-container" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
   <div class="w3-section">
-    <p>This is the Home-Page</p>
-  </div>
+    <p>Since 2020 Space Mining Industries (SMI) is the global leader in asterois mining harvesting,
+    setting new higher goals for Mankind.</br>
+    It's modular-base system, the SCave200, allows up to 3 human miners to work and live together comfortably
+    even light years distant from home. </p>
+  </div>  
 {% endblock %}

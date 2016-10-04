@@ -5,12 +5,8 @@
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<style>
-html,body,h1,h2,h3,h4,h5 {font-family: "Lato", sans-serif}
-.mySlides {display:none}
-.w3-left, .w3-right, .w3-tag {cursor:pointer}
-.w3-tag {height:15px;width:15px;padding:0;margin-top:6px}
-</style>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'stylesheet.css') }}">
+<script src = "{{ url_for('static', filename = 'my_scripts.js') }}"></script>
 <body>
 	
 	
@@ -20,6 +16,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Lato", sans-serif}
   <li class="w3-left" style="width:33.3% !important"><a href="{{ url_for('hiring') }}">Hiring</a></li>
   <li class="w3-left" style="width:33.3% !important"><a href="{{ url_for('login') }}">Log In</a></li>
 </ul>
+
 
 <!-- Content -->
  

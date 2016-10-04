@@ -3,8 +3,34 @@
 
 <div class="w3-content w3-container" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
   <div class="w3-section">
-    <p>This is the hiring page</p>
+    <h5>Welcome in the hiring-section of our website!<br>
+    On this page you can apply for job positions in SMI</h5>
   </div>
+  <hr>
+  <p>Currently avaiable positions:</p>
+  
+  {% for job in job_positions %}
+	  <!--<p>Position : {{ job.position }}, Description : {{ job.description }}, Requirements: {{ job.requirements }}</p>  -->  
+	  <div>
+  <ul>
+    <li>
+		{% if job.picture == "moon" %}
+      <img src="{{ url_for('static', filename = 'moon.jpg') }}" >
+        {% elif job.picture == "asteroid" %}
+      <img src="{{ url_for('static', filename = 'asteroid.jpg') }}" >
+        {% endif %}
+      <h3>{{job.position}}</h3>
+      <p>{{job.description}}</p>
+      <p>Requirements: {{job.requirements}}</p>
+    </li>
+  </ul>
+</div>
+	  
+	  
+	  
+	  
+	  
+  {% endfor %}
   
 {% endblock %}
 
