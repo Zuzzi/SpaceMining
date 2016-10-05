@@ -19,7 +19,7 @@
         {% elif job.picture == "asteroid" %}
       <img src="{{ url_for('static', filename = 'asteroid.jpg') }}" >
         {% endif %}
-      <h3>{{job.position}}</h3>
+      <h3>{{job.job}}</h3>
       <p>{{job.description}}</p>
       <p>Requirements: {{job.requirements}}</p>
     </li>
