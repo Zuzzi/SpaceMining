@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="w3-content w3-container" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+	<div class="w3-section">
+		<p>Welcome miner {{ username }}, this is your station - status PAGE</p>
+		<hr>
+		<h4>Station {{station.name}}</h4>
+		<br>
+		<p>Location : {{station.location}}</p>
+		<p>Oxygen : {{station.oxygen}} %</p>
+		<p>Food supplies : {{station.food}} %</p>
+		<p>Crew : {{station.crew}} members </p>
+		<p>Alarm : {{station.alarm}}</p>
+	</div>
+</div>
+
+{% endblock %}

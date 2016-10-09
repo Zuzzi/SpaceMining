@@ -25,13 +25,17 @@ def login():
 			request_username = request.form["username"]
 			request_password = request.form["password"]
 			print("Login request for username: " + request_username + " with password: " + request_password)
-			u = models.User.query.filter_by(username= request_username).first()
-			if u is not None:
-				permitted = u.verify_password(request_password)
+			user = models.User.query.filter_by(username= request_username).first()
+			if user is not None:
+				permitted = user.verify_password(request_password)
 				if permitted:
 					print("You have permission to log in")
-					login_user(u)
-					return redirect(url_for("%s_home" % (u.role)))
+					login_user(user)
+					if user.role == "miner":
+						next = "station_status"
+					elif user.role == "admin":
+						pass
+					return redirect(url_for(next))
 				else:
 					print("Wrong PASSWORD!")
 			else:
@@ -45,12 +49,23 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route("/miner_home")
+@app.route("/station_status")
 @login_required
-def miner_home():
-	print("I'm in")
+def station_status():
+	print("I'm in the station status function")
 	username = g.user.username
-	return render_template("miner_home.html", username = username)
+	station = models.Station.query.filter_by(name = g.user.station).first()
+	return render_template("station_status.html", username = username, station = station)
+	
+	
+@app.route("/reports_panel")
+@login_required
+def reports_panel():
+	print("I'm in the reports panel function")
+	username = g.user.username
+	reports = models.Report.query.filter_by(station = g.user.station)
+	return render_template("reports_panel.html", username = username, reports = reports)
+	
 	
 	
 @lm.user_loader
