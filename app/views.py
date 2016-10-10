@@ -4,6 +4,7 @@ from app import app
 from .forms import LoginForm, AddReportForm
 from app import db, models, lm
 from .models import User
+import datetime
 
 @app.route("/")
 @app.route("/index")
@@ -20,26 +21,25 @@ def hiring():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
-	if form.validate_on_submit():
-		if request.method == "POST":
-			request_username = request.form["username"]
-			request_password = request.form["password"]
-			print("Login request for username: " + request_username + " with password: " + request_password)
-			user = models.User.query.filter_by(username= request_username).first()
-			if user is not None:
-				permitted = user.verify_password(request_password)
-				if permitted:
-					print("You have permission to log in")
-					login_user(user)
-					if user.role == "miner":
-						next = "station_status"
-					elif user.role == "admin":
-						pass
-					return redirect(url_for(next))
-				else:
-					print("Wrong PASSWORD!")
+	if form.validate_on_submit() and request.method == "POST":
+		request_username = request.form["username"]
+		request_password = request.form["password"]
+		print("Login request for username: " + request_username + " with password: " + request_password)
+		user = models.User.query.filter_by(username= request_username).first()
+		if user is not None:
+			permitted = user.verify_password(request_password)
+			if permitted:
+				print("You have permission to log in")
+				login_user(user)
+				if user.role == "miner":
+					next = "station_status"
+				elif user.role == "admin":
+					pass
+				return redirect(url_for(next))
 			else:
-				print("Wrong USERNAME!")
+				print("Wrong PASSWORD!")
+		else:
+			print("Wrong USERNAME!")
 	return render_template("login.html", form = form)
 	
 	
@@ -58,13 +58,22 @@ def station_status():
 	return render_template("station_status.html", username = username, station = station)
 	
 	
-@app.route("/reports_panel")
+@app.route("/reports_panel", methods=['GET', 'POST'])
 @login_required
 def reports_panel():
 	form = AddReportForm()
-	print("I'm in the reports panel function")
 	username = g.user.username
 	reports = models.Report.query.filter_by(station = g.user.station)
+	if form.validate_on_submit() and request.method == "POST":
+		print("I'm in!")
+		station = g.user.station
+		request_type = request.form["type"]
+		request_description = request.form["description"]
+		timestamp = datetime.datetime.today()
+		r = models.Report(type = request_type, description = request_description,
+		                  miner = username, station = station, timestamp = timestamp)
+		db.session.add(r)
+		db.session.commit()
 	return render_template("reports_panel.html", username = username, reports = reports, form = form)
 	
 	
