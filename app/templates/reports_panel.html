@@ -7,13 +7,30 @@
 		<p>Welcome miner {{ username }}, this is your reports - panel PAGE</p>
 		<hr>
 		<center>
-		<table border = 1>
-			<tr><th>Type</th><th>Description</th><th>Reported by</th><tr></tr>
+		<table border = 1 style = "float:left">
+			<tr><th>Date</th><th>Type</th><th>Description</th><th>Reported by</th><tr></tr>
 			{% for report in reports %}
-			<tr><td>{{report.type}}</td><td>{{report.description}}</td><td>{{report.miner}}</td></tr>
+			<tr><td>{{report.timestamp.strftime("%Y-%m-%d %H:%M:%S")}}</td><td>{{report.type}}</td><td>{{report.description}}</td><td>{{report.miner}}</td></tr>
 			{% endfor %}
 		</table>
 		</center>
+		
+			<form action="" method="post" name="add_report" style = "float:right">
+	            {{form.hidden_tag() }}
+	        <p>
+	            Type:<br>
+	            {{ form.type }}
+	        </p>
+	        <p>
+				Description:<br>
+				{{ form.description }}
+			</p>
+			<br>
+	        <p><input type="submit" value="Add Report" style = "width: 100px"></p>
+	    </form>
+		
+		
+		
 	</div>
 </div>
 

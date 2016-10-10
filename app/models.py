@@ -73,6 +73,7 @@ class Report(db.Model):
 	miner = db.Column(db.String(60))
 	type = db.Column(db.String(60))
 	description = db.Column(db.Text)
+	timestamp = db.Column(db.DateTime)
 	
 	def __reprs__(self):
 		return '<Report %r>' % (self.description)

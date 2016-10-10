@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, request, session, url_for, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app
-from .forms import LoginForm
+from .forms import LoginForm, AddReportForm
 from app import db, models, lm
 from .models import User
 
@@ -61,11 +61,11 @@ def station_status():
 @app.route("/reports_panel")
 @login_required
 def reports_panel():
+	form = AddReportForm()
 	print("I'm in the reports panel function")
 	username = g.user.username
 	reports = models.Report.query.filter_by(station = g.user.station)
-	return render_template("reports_panel.html", username = username, reports = reports)
-	
+	return render_template("reports_panel.html", username = username, reports = reports, form = form)
 	
 	
 @lm.user_loader
