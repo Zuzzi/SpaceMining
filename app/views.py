@@ -5,6 +5,8 @@ from .forms import LoginForm, AddReportForm
 from app import db, models, lm
 from .models import User
 import datetime
+from config import *
+from sqlalchemy import desc
 
 @app.route("/")
 @app.route("/index")
@@ -49,13 +51,15 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route("/station_status")
+@app.route("/station_status", methods=['GET', 'POST'])
+@app.route("/station_status/<int:page>", methods=['GET', 'POST'])
 @login_required
-def station_status():
-	print("I'm in the station status function")
+def station_status(page = 1):
 	username = g.user.username
-	station = models.Station.query.filter_by(name = g.user.station).first()
-	return render_template("station_status.html", username = username, station = station)
+	u_station = models.Station.query.filter_by(name = g.user.station).first()
+	all_messages = models.Message.query.filter_by(station = u_station.name)
+	messages = all_messages.paginate(page, MESSAGES_PER_PAGE, False)
+	return render_template("station_status.html", username = username, station = u_station, messages = messages)
 	
 	
 @app.route("/reports_panel", methods=['GET', 'POST'])
@@ -64,6 +68,7 @@ def reports_panel():
 	form = AddReportForm()
 	username = g.user.username
 	reports = models.Report.query.filter_by(station = g.user.station)
+	ordered_reports = reports.order_by(desc(models.Report.timestamp))
 	if form.validate_on_submit() and request.method == "POST":
 		print("I'm in!")
 		station = g.user.station
@@ -74,7 +79,7 @@ def reports_panel():
 		                  miner = username, station = station, timestamp = timestamp)
 		db.session.add(r)
 		db.session.commit()
-	return render_template("reports_panel.html", username = username, reports = reports, form = form)
+	return render_template("reports_panel.html", username = username, reports = ordered_reports, form = form)
 	
 	
 @lm.user_loader

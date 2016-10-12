@@ -78,3 +78,13 @@ class Report(db.Model):
 	def __reprs__(self):
 		return '<Report %r>' % (self.description)
 
+
+class Message(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	title = db.Column(db.String(120))
+	text = db.Column(db.Text)
+	date = db.Column(db.DateTime)
+	station = db.Column(db.String(120))
+	
+	def __reprs__(self):
+		return '<Message %r>' % (self.text)
