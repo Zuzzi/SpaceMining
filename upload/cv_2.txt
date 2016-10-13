@@ -1,0 +1,5 @@
+CV - RESUME
+
+name: Nora
+surname: Bertis
+education: Business Degree

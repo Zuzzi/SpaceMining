@@ -1,12 +1,13 @@
 from flask import render_template, flash, redirect, request, session, url_for, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app
-from .forms import LoginForm, AddReportForm
+from .forms import LoginForm, AddReportForm, AddCurriculumForm
 from app import db, models, lm
 from .models import User
 import datetime
 from config import *
 from sqlalchemy import desc
+from werkzeug.utils import secure_filename
 
 @app.route("/")
 @app.route("/index")
@@ -15,10 +16,27 @@ def index():
 
 
 @app.route("/hiring")
-def hiring():			  
+def hiring():		  
 	job_positions = models.JobPosition.query.all()
 	return render_template("hiring.html", job_positions = job_positions)
-
+	
+	
+@app.route("/apply/<int:job_id>", methods=['GET', 'POST'])
+def apply(job_id = -1):
+	form = AddCurriculumForm()
+	job = models.JobPosition.query.filter_by(id = job_id).first()
+	if form.validate_on_submit() and request.method == "POST":
+		filename = secure_filename(form.cv.data.filename)
+		form.cv.data.save(UPLOAD_FOLDER + "/" + filename)
+		job_app = models.JobApplication(name = request.form["name"], last_name = request.form["last_name"],
+		                                email = request.form["email"], cv_path = UPLOAD_FOLDER + "/" + filename,
+		                                job_id = job_id )
+		db.session.add(job_app)
+		db.session.commit()
+		print("file saved!")
+		return render_template("success.html")
+	return render_template("apply.html", form = form, job = job)
+	
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

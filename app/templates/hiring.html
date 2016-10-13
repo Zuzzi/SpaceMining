@@ -10,10 +10,9 @@
   <p>Currently avaiable positions:</p>
   
   {% for job in job_positions %}
-	  <!--<p>Position : {{ job.position }}, Description : {{ job.description }}, Requirements: {{ job.requirements }}</p>  -->  
 	  <div>
   <ul>
-    <li>
+    <a href = "{{url_for('apply', job_id = job.id)}}"><li>
 		{% if job.picture == "moon" %}
       <img src="{{ url_for('static', filename = 'moon.jpg') }}" >
         {% elif job.picture == "asteroid" %}
@@ -23,6 +22,7 @@
       <p>{{job.description}}</p>
       <p>Requirements: {{job.requirements}}</p>
     </li>
+   </a>
   </ul>
 </div>
 	  

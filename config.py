@@ -9,3 +9,8 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 MESSAGES_PER_PAGE = 2
+
+
+UPLOAD_FOLDER = os.path.join(basedir, 'upload')
+#ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc', 'odt'])
+

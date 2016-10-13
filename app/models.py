@@ -88,3 +88,15 @@ class Message(db.Model):
 	
 	def __reprs__(self):
 		return '<Message %r>' % (self.text)
+		
+
+class JobApplication(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	name = db.Column(db.String(120))
+	last_name = db.Column(db.String(120))
+	email = db.Column(db.String(120))
+	cv_path = db.Column(db.String(120))
+	job_id = db.Column(db.Integer)
+	
+	def __reprs__(self):
+		return '<JobApplication %r>' % (self.id)

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="w3-content w3-container" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+
+  
+  
+  <center><h4>Your job application has been succesfully sent to the admin!</h4>
+  <br>
+  <h6>Next days check your email for the response</h6>
+  <br>
+  <br>
+  <a href = "{{url_for('index')}}"><img src="{{ url_for('static', filename = 'go-to-homepage.png') }}"></a>
+  
+  </center>
+
+  
+ </div>
+{% endblock %}
+
+
