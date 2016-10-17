@@ -29,8 +29,8 @@ def apply(job_id = -1):
 		filename = secure_filename(form.cv.data.filename)
 		form.cv.data.save(UPLOAD_FOLDER + "/" + filename)
 		job_app = models.JobApplication(name = request.form["name"], last_name = request.form["last_name"],
-		                                email = request.form["email"], cv_path = UPLOAD_FOLDER + "/" + filename,
-		                                job_id = job_id )
+										email = request.form["email"], cv_path = UPLOAD_FOLDER + "/" + filename,
+										job_id = job_id )
 		db.session.add(job_app)
 		db.session.commit()
 		print("file saved!")
@@ -54,7 +54,11 @@ def login():
 				if user.role == "miner":
 					next = "station_status"
 				elif user.role == "admin":
-					pass
+					next = "log_file"
+				f = models.LogFile(user = user.username, role = user.role, action = "Logged IN",
+				                   timestamp = datetime.datetime.today())
+				db.session.add(f)
+				db.session.commit()
 				return redirect(url_for(next))
 			else:
 				print("Wrong PASSWORD!")
@@ -65,8 +69,12 @@ def login():
 	
 @app.route('/logout')
 def logout():
-    logout_user()
-    return redirect(url_for('index'))
+	f = models.LogFile(user = g.user.username, role = g.user.role, action = "Logged OUT",
+	                   timestamp = datetime.datetime.today())
+	db.session.add(f)
+	db.session.commit()
+	logout_user()
+	return redirect(url_for('index'))
 
 
 @app.route("/station_status", methods=['GET', 'POST'])
@@ -88,16 +96,38 @@ def reports_panel():
 	reports = models.Report.query.filter_by(station = g.user.station)
 	ordered_reports = reports.order_by(desc(models.Report.timestamp))
 	if form.validate_on_submit() and request.method == "POST":
-		print("I'm in!")
 		station = g.user.station
 		request_type = request.form["type"]
 		request_description = request.form["description"]
 		timestamp = datetime.datetime.today()
 		r = models.Report(type = request_type, description = request_description,
-		                  miner = username, station = station, timestamp = timestamp)
+						  miner = username, station = station, timestamp = timestamp)
 		db.session.add(r)
+		r_id = models.Report.query.filter_by(timestamp = timestamp).first().id
+		f = models.LogFile(user = g.user.username, role = g.user.role,
+		                   action = "Added report " + str(r_id), timestamp = datetime.datetime.today())
+		db.session.add(f)
 		db.session.commit()
 	return render_template("reports_panel.html", username = username, reports = ordered_reports, form = form)
+	
+
+@app.route("/log_file")
+@login_required
+def log_file():
+	username = g.user.username
+	files = models.LogFile.query.all()
+	ordered_files = sorted(files, key=lambda x: x.timestamp, reverse=True)
+	return render_template("log_file.html", username = username, files = ordered_files)
+	
+
+@app.route("/clear_logfile", methods=['GET', 'POST'])
+@login_required
+def clear_logfile():
+	files = models.LogFile.query.all()
+	for file in files:
+		db.session.delete(file)
+	db.session.commit()
+	return redirect(url_for("log_file"))
 	
 	
 @lm.user_loader

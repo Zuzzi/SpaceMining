@@ -10,7 +10,7 @@ class JobPosition(db.Model):
 	picture = db.Column(db.String(60))
 
 	def __repr__(self):
-		return '<Job %r>' % (self.job)
+		return '<Job %r>' % (self.id)
 		
 
 class User(db.Model):
@@ -76,7 +76,7 @@ class Report(db.Model):
 	timestamp = db.Column(db.DateTime)
 	
 	def __reprs__(self):
-		return '<Report %r>' % (self.description)
+		return '<Report %r>' % (self.id)
 
 
 class Message(db.Model):
@@ -87,7 +87,7 @@ class Message(db.Model):
 	station = db.Column(db.String(120))
 	
 	def __reprs__(self):
-		return '<Message %r>' % (self.text)
+		return '<Message %r>' % (self.id)
 		
 
 class JobApplication(db.Model):
@@ -100,3 +100,15 @@ class JobApplication(db.Model):
 	
 	def __reprs__(self):
 		return '<JobApplication %r>' % (self.id)
+	
+	
+class LogFile(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	user = db.Column(db.String(120))
+	role = db.Column(db.String(60))
+	action = db.Column(db.String(60))
+	timestamp = db.Column(db.DateTime)
+	
+	def __reprs__(self):
+		return '<LogFile %r>' % (self.id)
+	
