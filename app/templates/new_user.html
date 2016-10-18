@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="w3-content w3-container" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+
+  <br><br><br>
+  
+  <center><h4>New User</h4></center>
+  <hr>
+  <center>
+    <form action="" method="post" name="add_user">
+        {{ form.hidden_tag() }}
+        <p>
+            Username:<br>
+            {{ form.username(size=50) }}
+        </p>
+        <p>
+			Password:<br>
+			{{ form.password(size = 50) }}
+		</p>
+        <p>
+			Confirm Password:<br>
+			{{ form.password_confirm(size = 50) }}
+		</p>
+        <p>
+			Role:<br>
+			{{ form.role(style = 'width:200px') }}
+		</p>
+        <p>
+			Station:<br>
+			{{ form.station(style = 'width:200px') }}
+		</p>			
+		<br>
+        <p><input type="submit" value="Add User" style = "width: 100px"></p>
+    </form>
+    </center>
+  
+ </div>
+{% endblock %}
+

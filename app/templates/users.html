@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="w3-content w3-container" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+	<div class="w3-section">
+		<br><br><br>
+		<p>Welcome admin {{ username }}, this is your users Page</p>
+		<hr>
+		<center>
+			
+			
+			<form action="{{ url_for('new_user') }}" method="post" name="new_user">
+			<br>
+	        <p><input type="submit" value="New User" style = "width: 100px"></p>
+	    </form>
+			
+			
+			
+		<table border = 1>
+			<tr><th>ID</th><th>Username</th><th>Role</th><th>Station</th><th>--Update--</th><th>--Delete--</th></tr>
+			{% for user in users %}
+			<tr><td>{{user.id}}</td><td>{{user.username}}</td><td>{{user.role}}</td><td>{{user.station}}</td>
+			    <td><button type="button" style = "width: 100%">Update</button></td><td><button type="button" style = "width: 100%" >Delete</button></td></tr>
+			{% endfor %}
+		</table>
+		</center>
+		
+
+	</div>
+</div>
+
+{% endblock %}
+
+
+

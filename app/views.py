@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, request, session, url_for, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app
-from .forms import LoginForm, AddReportForm, AddCurriculumForm
+from .forms import LoginForm, AddReportForm, AddCurriculumForm, AddUserForm
 from app import db, models, lm
 from .models import User
 import datetime
@@ -128,6 +128,27 @@ def clear_logfile():
 		db.session.delete(file)
 	db.session.commit()
 	return redirect(url_for("log_file"))
+
+
+@app.route("/users")
+@login_required
+def users():
+	users = models.User.query.all()
+	ordered_users = sorted(users, key=lambda x: x.id, reverse=True)
+	return render_template("users.html", users = ordered_users)
+	
+
+@app.route("/new_user",  methods=['GET', 'POST'])
+@login_required
+def new_user():
+	form = AddUserForm()
+	if form.validate_on_submit() and request.method == "POST":
+		u = models.User(username = request.form["username"], password = request.form["password"], 
+		                role = request.form["role"], station = request.form["station"])
+		db.session.add(u)
+		db.session.commit()
+		return redirect(url_for("users"))
+	return render_template("new_user.html", form = form)
 	
 	
 @lm.user_loader
